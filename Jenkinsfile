@@ -3,10 +3,14 @@ pipeline{
 	stages{
 		stage("Run Test"){
 			steps{
-				sh "docker-compose up"
+				sh "docker-compose up -d selenium-hub chrome firefox"
 			}
 		}
-		stage("Bring Grid Down")
+		stage("Run The Test")
+		steps{
+		sh "docker-compose up search-module book-flight-module"
+		}
+		stage("Stop")
 		{
 			steps{
 				sh "docker-compose down"
