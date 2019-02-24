@@ -20,7 +20,7 @@ services:
       - HUB_PORT_4444_TCP_ADDR=selenium-hub
       - HUB_PORT_4444_TCP_PORT=4444
   search-module:
-    image: vinsdocker/containertest:demo
+    image: darkklin/selenium-docker
     container_name: search-module
     depends_on:
       - firefox
@@ -30,7 +30,7 @@ services:
       - BROWSER=firefox
       - SELENIUM_HUB=selenium-hub
   order-module:
-    image: vinsdocker/containertest:demo
+    image: darkklin/selenium-docker
     container_name: order-module
     depends_on:
       - firefox
