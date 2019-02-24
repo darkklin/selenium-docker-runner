@@ -1,42 +1,39 @@
 version: "3"
 services:
-  selenium-hub:
+  hub:
     image: selenium/hub
-    container_name: selenium-hub
-    ports:
-      - "4444:4444"
   chrome:
-    image: selenium/node-chrome
+    image: selenium/node-chrome    
     depends_on:
-      - selenium-hub
+      - hub
     environment:
-      - HUB_PORT_4444_TCP_ADDR=selenium-hub
-      - HUB_PORT_4444_TCP_PORT=4444
+      - HUB_HOST=hub
   firefox:
     image: selenium/node-firefox
-    shm_size: '1gb'
+    shm_size: '1gb'   
     depends_on:
-      - selenium-hub
+      - hub
     environment:
-      - HUB_PORT_4444_TCP_ADDR=selenium-hub
-      - HUB_PORT_4444_TCP_PORT=4444
+      - HUB_HOST=hub
   search-module:
     image: darkklin/selenium-docker
-    container_name: search-module
     depends_on:
-      - firefox
       - chrome
+      - firefox
     environment:
-      - MODULE=search-module.xml
+      - HUB_HOST=hub
       - BROWSER=firefox
-      - SELENIUM_HUB=selenium-hub
-  order-module:
+      - MODULE=search-module.xml
+    volumes:
+      - ./output/search-result:/usr/share/udemy/test-output      
+  book-flight-module:
     image: darkklin/selenium-docker
-    container_name: order-module
     depends_on:
-      - firefox
       - chrome
+      - firefox
     environment:
-      - MODULE=order-module.xml
+      - HUB_HOST=hub
       - BROWSER=chrome
-      - SELENIUM_HUB=selenium-hub
+      - MODULE=book-flight-module.xml
+    volumes:
+      - ./output/book-result:/usr/share/udemy/test-output   
